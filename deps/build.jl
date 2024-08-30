@@ -1,13 +1,13 @@
 #copied from GeoPythonPlot
 using Pkg
-using CondaPkg #, Conda
+using Conda
 
 if lowercase(get(ENV, "CI", "false")) == "true"    
 
     ENV["PYTHON"] = ""
     Pkg.build("PyCall")
 
-    CondaPkg.add("matplotlib")
+    Conda.add("matplotlib")
     #Conda.add("shapely",channel="conda-forge")
     #CondaPkg.add("cartopy")
     #CondaPkg.add("cmocean")
