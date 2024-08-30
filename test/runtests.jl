@@ -1,5 +1,5 @@
 using PyPlotExt, Test
-using DimensionalData, Unitful, Measurements, PyPlot
+using DimensionalData, Unitful, Measurements, PythonPlot
 
 const K = u"K"
 const yr = u"yr"
@@ -28,7 +28,16 @@ const yr = u"yr"
         tight_layout()
         savefig("../plots/dimarray.png")
     end
-    
+
+    @testset "Scatter vectors of measurements" begin
+        x = (randn(5) .± abs.(randn(5)))K
+        y = (randn(5) .± abs.(randn(5)))K
+        figure()
+        N = 3
+        subplot(N, 1, 1)
+        scatter(x,y, color = "red")
+    end
+
     
 end
 

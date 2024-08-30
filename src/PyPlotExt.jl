@@ -1,8 +1,18 @@
 module PyPlotExt 
-using PyPlot, Unitful, Measurements, Revise, DimensionalData
-import PyPlot.plot, PyPlot.scatter, Measurements.uncertainty, Measurements.value
+using PythonPlot, Unitful, Measurements, Revise, DimensionalData, PythonCall
+import PythonPlot.plot, PythonPlot.scatter, Measurements.uncertainty, Measurements.value
 export plot, scatter, uncertainty, value
-    
+
+const pyplot = pyimport("matplotlib.pyplot")
+const mpl = pyimport("matplotlib")
+
+
+function __init__()
+     PythonCall.pycopy!(mpl,pyimport("matplotlib"))
+     PythonCall.pycopy!(pyplot,pyimport("matplotlib.pyplot"))
+     println("Python libraries installed")
+end
+
 function plot(y::DimArray; lwcentral=3, lwedges=0, kwargs...)
     unc = ustrip.(uncertainty.(vec(y)))    
     x = ustrip.(collect(first(dims(y))))
