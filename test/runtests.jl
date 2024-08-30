@@ -4,7 +4,7 @@ using DimensionalData, Unitful, Measurements, PythonPlot
 const K = u"K"
 const yr = u"yr"
 
-@testset "PyPlotExt" begin
+@testset "PythonPlotExt" begin
     @testset "Plotting a DimArray" begin
         data = randn(3, 10)K
         dataunc = abs.(randn(3,10))K
