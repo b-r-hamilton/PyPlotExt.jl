@@ -41,7 +41,7 @@ function scatter(x::Vector{Quantity{Measurement{T}}}, y::Vector{Quantity{Measure
     ylabel(string(yunit))
 end
 
-function scatter(x::Vector{Measurement{T1}}, y::Vector{Measurement{T}}; kwargs...) where T <: AbstractFloat
+function scatter(x::Vector{Measurement{T}}, y::Vector{Measurement{T}}; kwargs...) where T <: AbstractFloat
     #xerr = uncertainty.(ustrip.(x))
     yerr = uncertainty.(ustrip.(y))
     #xunit = unit(first(x))

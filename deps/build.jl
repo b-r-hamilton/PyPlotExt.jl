@@ -1,4 +1,4 @@
-#copied from GeoPythonPlot, I had to change from COndaPkg to Conda 
+#copied from GeoPythonPlot
 using Pkg
 using CondaPkg
 
