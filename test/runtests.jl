@@ -1,4 +1,4 @@
-using PyPlotExt, Test
+using PythonPlotExt, Test
 using DimensionalData, Unitful, Measurements, PythonPlot
 
 const K = u"K"
