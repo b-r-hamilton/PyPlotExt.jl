@@ -1,5 +1,7 @@
 # PyPlotExt
+
 [![Build Status](https://github.com/b-r-hamilton/PyPlotExt.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/b-r-hamilton/PyPlotExt.jl/actions/workflows/CI.yml?query=branch%3Amain)
+
 Extension of PyPlot that allows for easy plotting with common Julia packages (Unitful.jl, Measurements.jl)
 =======
 This package extends common `PyPlot.jl` functions for common Julia packages with specialized data types. For instance, this allows for simple shortcuts to plot `DimArray`s (`from DimensionalData.jl`). It also allows for plotting of `Measurements` (data types with values and uncertainties from `Measurements.jl`) and `Quantities` (values with units from `Unitful.jl`). I attempt to follow typical `matplotlib` formatting conventions, but for some edge cases (e.g., a ribbon plot with a central estimate and uncertainty), new syntax must be used to distinguish between the different `matplotlib` elements being used (e.g, a `plot` and a `fill_between`). 
