@@ -19,16 +19,16 @@ function plot(y::DimArray; lwcentral=3, lwedges=0, kwargs...)
     xunit = unit(first(first(dims(y))))
     yunit = unit(first(y))
     y = ustrip.(value.(vec(y)))
+    plot(x, y; kwargs...)
     if sum(unc) != 0 
         f = fill_between(x = x, y1 = y .- unc, y2 = y .+ unc, alpha = 0.3, linewidth = lwedges; kwargs...)
     end
     
-    plot(x, y, alpha = 0.7, linewidth = lwcentral; kwargs...)
     xlabel(string(xunit))
     ylabel(string(yunit))
     return x, y 
 end
-
+#=
 function scatter(x::Vector{Quantity{Measurement{T}}}, y::Vector{Quantity{Measurement{T}}}; kwargs...) where T <: AbstractFloat
     xerr = uncertainty.(ustrip.(x))
     yerr = uncertainty.(ustrip.(y))
@@ -40,46 +40,61 @@ function scatter(x::Vector{Quantity{Measurement{T}}}, y::Vector{Quantity{Measure
     xlabel(string(xunit))
     ylabel(string(yunit))
 end
+=#
 
-function scatter(x::Vector{Measurement{T}}, y::Vector{Measurement{T}}; kwargs...) where T <: AbstractFloat
-    #xerr = uncertainty.(ustrip.(x))
+function scatter(x::Vector{Quantity}, y::Vector{Quantity}; kwargs...)
+    xerr = uncertainty.(ustrip.(x))
     yerr = uncertainty.(ustrip.(y))
-    #xunit = unit(first(x))
+    xunit = unit(first(x))
     yunit = unit(first(y))
-    #x = value.(ustrip.(x))
+    x = value.(ustrip.(x))
     y = value.(ustrip.(y))
-    errorbar(x, y, yerr = yerr; kwargs...)
-    #xlabel(string(xunit))
-    #ylabel(string(yunit))
+    if sum(xerr) + sum(yerr) != 0 
+        errorbar(x, y, xerr = xerr, yerr = yerr, fmt = "none"; kwargs...)
+    else
+        scatter(x, y; kwargs...)
+    end
+    
+    xlabel(string(xunit))
+    ylabel(string(yunit))
 end
 
-function scatter(x::Vector, y::Vector{Measurement{T}}; kwargs...) where T <: AbstractFloat
-    #xerr = uncertainty.(ustrip.(x))
+function plot(x::Vector{Quantity}, y::Vector{Quantity}; kwargs...) 
+    xerr = uncertainty.(ustrip.(x))
     yerr = uncertainty.(ustrip.(y))
-    #xunit = unit(first(x))
-    yunit = unit(first(y))
-    #x = value.(ustrip.(x))
+    if T1 isa Quantity 
+        xunit = unit(first(x))
+        xlabel(string(xunit))
+    elseif T2 isa Quantity
+        yunit = unit(first(y))
+        ylabel(string(yunit))
+    end
+    
+    x = value.(ustrip.(x))
     y = value.(ustrip.(y))
-    errorbar(x, y, yerr = yerr; kwargs...)
-    #xlabel(string(xunit))
-    #ylabel(string(yunit))
+    if sum(xerr) + sum(yerr) != 0 
+        errorbar(x, y, xerr = xerr, yerr = yerr, fmt = "none"; kwargs...)
+    else
+        plot(x,y;kwargs...)
+    end
+
 end
+
+
 
 function scatter(x::Vector{Measurement{T}}, y::Vector; kwargs...) where T <: AbstractFloat
-    
     xerr = uncertainty.(ustrip.(x))
     #yerr = uncertainty.(ustrip.(y))
-    #xunit = unit(first(x))
-    #yunit = unit(first(y))
+    xunit = unit(first(x))
+    yunit = unit(first(y))
     x = value.(ustrip.(x))
     y = value.(ustrip.(y))
     errorbar(x, y, xerr = xerr; kwargs...)
-    #xlabel(string(xunit))
-    #ylabel(string(yunit))
+    xlabel(string(xunit))
+    ylabel(string(yunit))
 end
 
 
-#this one def. works 
 function scatter(x::Array{Quantity{Measurement{T}, D1, A1}}, y::Array{Quantity{Measurement{T}, D2, A2}}; kwargs...) where {T <: AbstractFloat, D1, A1, D2, A2}
     xerr = uncertainty.(ustrip.(x))
     yerr = uncertainty.(ustrip.(y))
@@ -92,14 +107,24 @@ function scatter(x::Array{Quantity{Measurement{T}, D1, A1}}, y::Array{Quantity{M
     ylabel(string(yunit))
 end
 
-function scatter(x::Vector{Quantity{T, D1, A1}}, y::Vector{Quantity{T, D2, A2}}; kwargs...) where {T <: AbstractFloat, D1, A1, D2, A2}
+function scatter(x::Array{Quantity{T, D1, A1}}, y::Array{Quantity{T, D2, A2}}; kwargs...) where {T <: AbstractFloat, D1, A1, D2, A2}
     xerr = uncertainty.(ustrip.(x))
     yerr = uncertainty.(ustrip.(y))
     xunit = unit(first(x))
     yunit = unit(first(y))
     x = value.(ustrip.(x))
     y = value.(ustrip.(y))
-    errorbar(x, y, xerr = xerr, yerr = yerr; kwargs...)
+    if sum(yerr) != 0 && sum(xerr) == 0
+        errorbar(x, y, yerr = yerr; kwargs...)
+    elseif sum(yerr) == 0 && sum(xerr) != 0
+        errorbar(x,y,xerr = xerr;kwargs...)
+    elseif sum(yerr) != 0 && sum(xerr) != 0
+        errorbar(x,y,xerr = xerr,yerr=yerr;kwargs...)
+    elseif sum(yerr) == 0 && sum(xerr) == 0
+        scatter(x,y;kwargs...)
+    end
+    
+        
     xlabel(string(xunit))
     ylabel(string(yunit))
 end
