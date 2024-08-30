@@ -35,7 +35,10 @@ const yr = u"yr"
         figure()
         N = 3
         subplot(N, 1, 1)
-        scatter(x,y, color = "red")
+        scatter(x,y, color = "red", fmt = "none")
+
+        subplot(N, 1, 2)
+        scatter(ustrip.(x), ustrip.(y))
     end
 
     
