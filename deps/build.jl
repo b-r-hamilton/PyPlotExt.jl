@@ -5,7 +5,7 @@ using CondaPkg
 if lowercase(get(ENV, "CI", "false")) == "true"    
 
     ENV["PYTHON"] = ""
-    Pkg.build("PyCall")
+    Pkg.build("PythonCall")
     CondaPkg.add("matplotlib")
     #Conda.add("shapely",channel="conda-forge")
     #CondaPkg.add("cartopy")
